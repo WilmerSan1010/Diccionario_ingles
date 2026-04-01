@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Pencil, Trash2 } from 'lucide-react';
 
 const typeBadgeColors = {
     noun:      'bg-blue-100 text-blue-700',
@@ -90,21 +91,25 @@ export default function Index({ words }) {
                                                 <td className="px-6 py-4 text-gray-500 italic max-w-xs truncate">
                                                     {word.example ?? '—'}
                                                 </td>
-                                                <td className="px-6 py-4 text-right space-x-3">
-                                                    <Link
-                                                        id={`btn-edit-${word.id}`}
-                                                        href={route('words.edit', word.id)}
-                                                        className="text-indigo-500 hover:text-indigo-700 text-xs font-semibold transition"
-                                                    >
-                                                        Editar
-                                                    </Link>
-                                                    <button
-                                                        id={`btn-delete-${word.id}`}
-                                                        onClick={() => handleDelete(word.id)}
-                                                        className="text-red-500 hover:text-red-700 text-xs font-semibold transition"
-                                                    >
-                                                        Eliminar
-                                                    </button>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Link
+                                                            id={`btn-edit-${word.id}`}
+                                                            href={route('words.edit', word.id)}
+                                                            title="Editar"
+                                                            className="p-1.5 rounded-lg text-indigo-500 hover:bg-indigo-50 hover:text-indigo-700 transition"
+                                                        >
+                                                            <Pencil size={15} />
+                                                        </Link>
+                                                        <button
+                                                            id={`btn-delete-${word.id}`}
+                                                            onClick={() => handleDelete(word.id)}
+                                                            title="Eliminar"
+                                                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition"
+                                                        >
+                                                            <Trash2 size={15} />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
