@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const typeBadgeColors = {
     noun:      'bg-blue-100 text-blue-700',
@@ -21,8 +21,69 @@ function TypeBadge({ type }) {
     );
 }
 
+// Inertia pasa el paginador "aplanado": words.current_page, words.total, etc.
+function Pagination({ words }) {
+    if (words.last_page <= 1) return null;
+
+    return (
+        <div className="mt-6 flex items-center justify-between">
+            <p className="text-sm text-gray-500">
+                Mostrando {words.from}–{words.to} de {words.total} palabras
+            </p>
+            <div className="flex items-center gap-1">
+                {/* Anterior */}
+                {words.prev_page_url ? (
+                    <Link
+                        href={words.prev_page_url}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 transition"
+                    >
+                        <ChevronLeft size={14} /> Anterior
+                    </Link>
+                ) : (
+                    <span className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-300 cursor-not-allowed">
+                        <ChevronLeft size={14} /> Anterior
+                    </span>
+                )}
+
+                {/* Números de página */}
+                <div className="flex items-center gap-1 mx-1">
+                    {Array.from({ length: words.last_page }, (_, i) => i + 1).map(page => (
+                        <Link
+                            key={page}
+                            href={`${route('words.index')}?page=${page}`}
+                            className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition ${
+                                page === words.current_page
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                            }`}
+                        >
+                            {page}
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Siguiente */}
+                {words.next_page_url ? (
+                    <Link
+                        href={words.next_page_url}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 transition"
+                    >
+                        Siguiente <ChevronRight size={14} />
+                    </Link>
+                ) : (
+                    <span className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-300 cursor-not-allowed">
+                        Siguiente <ChevronRight size={14} />
+                    </span>
+                )}
+            </div>
+        </div>
+    );
+}
+
 export default function Index({ words }) {
     const { flash } = usePage().props;
+    const wordList = words.data; // los registros de la página actual
+
     function handleDelete(id) {
         if (confirm('¿Seguro que quieres eliminar esta palabra?')) {
             router.delete(route('words.destroy', id));
@@ -55,7 +116,7 @@ export default function Index({ words }) {
                         </div>
                     )}
 
-                    {words.length === 0 ? (
+                    {wordList.length === 0 ? (
                         <div className="rounded-lg bg-white shadow-sm p-12 text-center">
                             <p className="text-4xl mb-3">📚</p>
                             <p className="text-gray-500 text-lg">Aún no has agregado ninguna palabra.</p>
@@ -68,7 +129,9 @@ export default function Index({ words }) {
                         </div>
                     ) : (
                         <>
-                            <p className="mb-4 text-sm text-gray-500">{words.length} palabra{words.length !== 1 ? 's' : ''} registrada{words.length !== 1 ? 's' : ''}</p>
+                            <p className="mb-4 text-sm text-gray-500">
+                                {words.total} palabra{words.total !== 1 ? 's' : ''} en total
+                            </p>
                             <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                                 <table className="w-full text-sm text-left">
                                     <thead className="bg-gray-50 border-b border-gray-200">
@@ -81,7 +144,7 @@ export default function Index({ words }) {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
-                                        {words.map(word => (
+                                        {wordList.map(word => (
                                             <tr key={word.id} className="hover:bg-gray-50 transition">
                                                 <td className="px-6 py-4 font-semibold text-gray-900">{word.word}</td>
                                                 <td className="px-6 py-4 text-gray-700">{word.translation}</td>
@@ -116,6 +179,8 @@ export default function Index({ words }) {
                                     </tbody>
                                 </table>
                             </div>
+
+                            <Pagination words={words} />
                         </>
                     )}
                 </div>

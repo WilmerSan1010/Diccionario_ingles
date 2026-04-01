@@ -11,7 +11,7 @@ class WordController extends Controller
     // Vista: lista de todas las palabras
     public function index()
     {
-        $words = Word::latest()->get();
+        $words = Word::latest()->paginate(20);
         return Inertia::render('Words/Index', ['words' => $words]);
     }
 
@@ -38,7 +38,7 @@ class WordController extends Controller
 
         Word::create($request->all());
 
-       
+        return redirect()->route('words.create')->with('success', 'Palabra guardada correctamente.');
     }
 
     // Vista: formulario de edición
