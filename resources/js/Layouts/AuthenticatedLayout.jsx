@@ -30,6 +30,24 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    href={route('words.create')}
+                                    active={route().current('words.create')}
+                                >
+                                    ➕ Agregar
+                                </NavLink>
+                                <NavLink
+                                    href={route('words.index')}
+                                    active={route().current('words.index')}
+                                >
+                                    📖 Mi Vocabulario
+                                </NavLink>
+                                <NavLink
+                                    href={route('words.search')}
+                                    active={route().current('words.search')}
+                                >
+                                    🔍 Buscador
+                                </NavLink>
                             </div>
                         </div>
 
@@ -133,6 +151,24 @@ export default function AuthenticatedLayout({ header, children }) {
                             active={route().current('dashboard')}
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('words.create')}
+                            active={route().current('words.create')}
+                        >
+                            ➕ Agregar
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('words.index')}
+                            active={route().current('words.index')}
+                        >
+                            📖 Mi Vocabulario
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('words.search')}
+                            active={route().current('words.search')}
+                        >
+                            🔍 Buscador
                         </ResponsiveNavLink>
                     </div>
 
