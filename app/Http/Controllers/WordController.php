@@ -30,11 +30,15 @@ class WordController extends Controller
             'type'        => 'nullable|string|max:50',
             'example'     => 'nullable|string',
             'notes'       => 'nullable|string',
+        ], [
+            'word.required'    => 'La palabra en inglés es obligatoria.',
+            'word.unique'      => 'Esta palabra ya está registrada en tu vocabulario.',
+            'translation.required' => 'La traducción es obligatoria.',
         ]);
 
         Word::create($request->all());
 
-        return redirect()->route('words.index')->with('success', 'Palabra guardada correctamente.');
+        return redirect()->route('words.create')->with('success', '✅ Palabra guardada correctamente.');
     }
 
     // Vista: buscador de palabras
