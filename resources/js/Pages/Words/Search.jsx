@@ -1,14 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const typeBadgeColors = {
-    noun:      'bg-blue-100 text-blue-700',
-    verb:      'bg-green-100 text-green-700',
+    noun: 'bg-blue-100 text-blue-700',
+    verb: 'bg-green-100 text-green-700',
     adjective: 'bg-purple-100 text-purple-700',
-    adverb:    'bg-yellow-100 text-yellow-700',
-    phrase:    'bg-pink-100 text-pink-700',
-    other:     'bg-gray-100 text-gray-600',
+    adverb: 'bg-yellow-100 text-yellow-700',
+    phrase: 'bg-pink-100 text-pink-700',
+    other: 'bg-gray-100 text-gray-600',
 };
 
 function TypeBadge({ type }) {
@@ -24,10 +24,17 @@ function TypeBadge({ type }) {
 export default function Search({ words, query: initialQuery }) {
     const [query, setQuery] = useState(initialQuery ?? '');
 
-    function handleSearch(e) {
-        e.preventDefault();
-        router.get(route('words.search'), { q: query }, { preserveState: true });
-    }
+    // Busca automáticamente 350ms después de que el usuario deja de escribir
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.get(route('words.search'), { q: query }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 350);
+
+        return () => clearTimeout(timeout);
+    }, [query]);
 
     return (
         <AuthenticatedLayout
@@ -42,37 +49,35 @@ export default function Search({ words, query: initialQuery }) {
             <div className="py-12">
                 <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
                     {/* Barra de búsqueda */}
-                    <form onSubmit={handleSearch} className="flex gap-3 mb-8">
+                    <div className="mb-8">
                         <input
                             id="search-input"
                             type="text"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder="Busca en inglés o español..."
-                            className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition text-base"
+                            placeholder="Escribe en inglés o español..."
+                            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition text-base"
                             autoFocus
                         />
-                        <button
-                            id="btn-search"
-                            type="submit"
-                            className="rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700 active:scale-95 transition"
-                        >
-                            Buscar
-                        </button>
-                    </form>
+                        {query && (
+                            <p className="mt-2 text-xs text-gray-400">
+                                Buscando en tiempo real...
+                            </p>
+                        )}
+                    </div>
 
                     {/* Resultados */}
-                    {initialQuery && words.length === 0 && (
+                    {query && words.length === 0 && (
                         <div className="rounded-lg bg-white shadow-sm p-10 text-center">
                             <p className="text-3xl mb-2">🤔</p>
-                            <p className="text-gray-500">No se encontró <strong>"{initialQuery}"</strong> en tu vocabulario.</p>
+                            <p className="text-gray-500">No se encontró <strong>"{query}"</strong> en tu vocabulario.</p>
                         </div>
                     )}
 
                     {words.length > 0 && (
                         <>
                             <p className="mb-3 text-sm text-gray-500">
-                                {words.length} resultado{words.length !== 1 ? 's' : ''} para <strong>"{initialQuery}"</strong>
+                                {words.length} resultado{words.length !== 1 ? 's' : ''} para <strong>"{query}"</strong>
                             </p>
                             <div className="space-y-3">
                                 {words.map(word => (
@@ -101,7 +106,7 @@ export default function Search({ words, query: initialQuery }) {
                         </>
                     )}
 
-                    {!initialQuery && (
+                    {!query && (
                         <div className="rounded-lg bg-white shadow-sm p-10 text-center">
                             <p className="text-4xl mb-3">🔎</p>
                             <p className="text-gray-500">Escribe una palabra en inglés o español para buscarla.</p>
