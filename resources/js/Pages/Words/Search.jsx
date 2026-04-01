@@ -74,7 +74,7 @@ export default function Search({ words, query: initialQuery }) {
                         </div>
                     )}
 
-                    {words.length > 0 && (
+                    {query && words.length > 0 && (
                         <>
                             <p className="mb-3 text-sm text-gray-500">
                                 {words.length} resultado{words.length !== 1 ? 's' : ''} para <strong>"{query}"</strong>
