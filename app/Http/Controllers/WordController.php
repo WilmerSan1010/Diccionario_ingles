@@ -38,7 +38,33 @@ class WordController extends Controller
 
         Word::create($request->all());
 
-        return redirect()->route('words.create')->with('success', '✅ Palabra guardada correctamente.');
+       
+    }
+
+    // Vista: formulario de edición
+    public function edit(Word $word)
+    {
+        return Inertia::render('Words/Edit', ['word' => $word]);
+    }
+
+    // Actualizar palabra
+    public function update(Request $request, Word $word)
+    {
+        $request->validate([
+            'word'        => 'required|string|max:255|unique:words,word,' . $word->id,
+            'translation' => 'required|string|max:255',
+            'type'        => 'nullable|string|max:50',
+            'example'     => 'nullable|string',
+            'notes'       => 'nullable|string',
+        ], [
+            'word.required'        => 'La palabra en inglés es obligatoria.',
+            'word.unique'          => 'Esta palabra ya está registrada en tu vocabulario.',
+            'translation.required' => 'La traducción es obligatoria.',
+        ]);
+
+        $word->update($request->all());
+
+        return redirect()->route('words.index')->with('success', 'Palabra actualizada correctamente.');
     }
 
     // Vista: buscador de palabras

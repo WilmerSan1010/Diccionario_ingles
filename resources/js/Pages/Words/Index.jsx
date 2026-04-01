@@ -90,7 +90,14 @@ export default function Index({ words }) {
                                                 <td className="px-6 py-4 text-gray-500 italic max-w-xs truncate">
                                                     {word.example ?? '—'}
                                                 </td>
-                                                <td className="px-6 py-4 text-right">
+                                                <td className="px-6 py-4 text-right space-x-3">
+                                                    <Link
+                                                        id={`btn-edit-${word.id}`}
+                                                        href={route('words.edit', word.id)}
+                                                        className="text-indigo-500 hover:text-indigo-700 text-xs font-semibold transition"
+                                                    >
+                                                        Editar
+                                                    </Link>
                                                     <button
                                                         id={`btn-delete-${word.id}`}
                                                         onClick={() => handleDelete(word.id)}
