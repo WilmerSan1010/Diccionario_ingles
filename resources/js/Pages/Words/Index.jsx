@@ -3,12 +3,12 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const typeBadgeColors = {
-    noun:      'bg-blue-100 text-blue-700',
-    verb:      'bg-green-100 text-green-700',
+    noun: 'bg-blue-100 text-blue-700',
+    verb: 'bg-green-100 text-green-700',
     adjective: 'bg-purple-100 text-purple-700',
-    adverb:    'bg-yellow-100 text-yellow-700',
-    phrase:    'bg-pink-100 text-pink-700',
-    other:     'bg-gray-100 text-gray-600',
+    adverb: 'bg-yellow-100 text-yellow-700',
+    phrase: 'bg-pink-100 text-pink-700',
+    other: 'bg-gray-100 text-gray-600',
 };
 
 function TypeBadge({ type }) {
@@ -51,11 +51,10 @@ function Pagination({ words }) {
                         <Link
                             key={page}
                             href={`${route('words.index')}?page=${page}`}
-                            className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition ${
-                                page === words.current_page
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                            }`}
+                            className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition ${page === words.current_page
+                                ? 'bg-indigo-600 text-white'
+                                : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                }`}
                         >
                             {page}
                         </Link>
@@ -95,7 +94,7 @@ export default function Index({ words }) {
             header={
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        📖 Mi Vocabulario
+                        Mi Vocabulario
                     </h2>
                     <Link
                         href={route('words.create')}
@@ -118,7 +117,7 @@ export default function Index({ words }) {
 
                     {wordList.length === 0 ? (
                         <div className="rounded-lg bg-white shadow-sm p-12 text-center">
-                            <p className="text-4xl mb-3">📚</p>
+                            <p className="text-4xl mb-3"></p>
                             <p className="text-gray-500 text-lg">Aún no has agregado ninguna palabra.</p>
                             <Link
                                 href={route('words.create')}
