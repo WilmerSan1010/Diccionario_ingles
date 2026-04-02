@@ -131,7 +131,41 @@ export default function Index({ words }) {
                             <p className="mb-4 text-sm text-gray-500">
                                 {words.total} palabra{words.total !== 1 ? 's' : ''} en total
                             </p>
-                            <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+
+                            {/* ── Móvil: cards ── */}
+                            <div className="flex flex-col gap-3 sm:hidden">
+                                {wordList.map(word => (
+                                    <div key={word.id} className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-base font-bold text-gray-900">{word.word}</span>
+                                            <TypeBadge type={word.type} />
+                                        </div>
+                                        <span className="text-gray-700 text-sm">{word.translation}</span>
+                                        {word.example && (
+                                            <span className="text-gray-400 text-xs italic truncate">{word.example}</span>
+                                        )}
+                                        <div className="flex items-center gap-2 pt-1">
+                                            <Link
+                                                id={`btn-edit-${word.id}`}
+                                                href={route('words.edit', word.id)}
+                                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-indigo-600 border border-indigo-200 hover:bg-indigo-50 transition"
+                                            >
+                                                <Pencil size={13} /> Editar
+                                            </Link>
+                                            <button
+                                                id={`btn-delete-${word.id}`}
+                                                onClick={() => handleDelete(word.id)}
+                                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-red-500 border border-red-200 hover:bg-red-50 transition"
+                                            >
+                                                <Trash2 size={13} /> Eliminar
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* ── Desktop: tabla ── */}
+                            <div className="hidden sm:block overflow-hidden bg-white shadow-sm rounded-lg">
                                 <table className="w-full text-sm text-left">
                                     <thead className="bg-gray-50 border-b border-gray-200">
                                         <tr>
@@ -147,12 +181,8 @@ export default function Index({ words }) {
                                             <tr key={word.id} className="hover:bg-gray-50 transition">
                                                 <td className="px-6 py-4 font-semibold text-gray-900">{word.word}</td>
                                                 <td className="px-6 py-4 text-gray-700">{word.translation}</td>
-                                                <td className="px-6 py-4">
-                                                    <TypeBadge type={word.type} />
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-500 italic max-w-xs truncate">
-                                                    {word.example ?? '—'}
-                                                </td>
+                                                <td className="px-6 py-4"><TypeBadge type={word.type} /></td>
+                                                <td className="px-6 py-4 text-gray-500 italic max-w-xs truncate">{word.example ?? '—'}</td>
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="flex items-center justify-end gap-2">
                                                         <Link
