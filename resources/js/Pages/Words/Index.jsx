@@ -92,13 +92,13 @@ export default function Index({ words }) {
     return (
         <AuthenticatedLayout
             header={
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
                         Mi Vocabulario
                     </h2>
                     <Link
                         href={route('words.create')}
-                        className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition"
+                        className="self-start rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition"
                     >
                         ➕ Agregar palabra
                     </Link>
@@ -132,7 +132,7 @@ export default function Index({ words }) {
                                 {words.total} palabra{words.total !== 1 ? 's' : ''} en total
                             </p>
 
-                            {/* ── Móvil: cards ── */}
+                            {/*responsive*/}
                             <div className="flex flex-col gap-3 sm:hidden">
                                 {wordList.map(word => (
                                     <div key={word.id} className="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-2">
